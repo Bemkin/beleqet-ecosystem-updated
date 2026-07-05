@@ -64,6 +64,7 @@ jobs:
           FRONTEND_URL=http://localhost:3000
           BULL_BOARD_USERNAME=admin
           BULL_BOARD_PASSWORD=ci_board_password
+          OPENAI_API_KEY=sk-test-dummy-key-for-ci
           EOF
 
       - run: npx prisma generate
@@ -127,6 +128,7 @@ jobs:
           FRONTEND_URL=http://localhost:3000
           BULL_BOARD_USERNAME=admin
           BULL_BOARD_PASSWORD=ci_board_password
+          OPENAI_API_KEY=sk-test-dummy-key-for-ci
           EOF
 
       - run: npx prisma generate
