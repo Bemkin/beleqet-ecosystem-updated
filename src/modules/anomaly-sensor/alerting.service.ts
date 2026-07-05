@@ -27,11 +27,14 @@ export interface AlertPayload {
 @Injectable()
 export class AlertingService {
   private readonly logger = new Logger(AlertingService.name);
+  private readonly slackWebhookUrl: string;
 
   constructor(
     @InjectQueue(QUEUE_NAMES.NOTIFICATIONS) private readonly notificationsQueue: Queue,
     private readonly config: ConfigService,
-  ) {}
+  ) {
+    this.slackWebhookUrl = this.config.get<string>('SLACK_WEBHOOK_URL') || '';
+  }
 
   /**
    * Dispatch an anomaly alert through multiple channels (Email, Slack).
@@ -42,6 +45,7 @@ export class AlertingService {
     try {
       await Promise.all([
         this.sendEmailAlert(payload),
+        this.sendSlackAlert(payload),
       ]);
     } catch (error) {
       this.logger.error(`Failed to dispatch alert: ${(error as Error).message}`);
@@ -66,5 +70,41 @@ export class AlertingService {
              <p><strong>Details:</strong> ${payload.message}</p>`,
     });
     this.logger.debug(`Email alert queued for ${adminEmail}`);
+  }
+
+  /**
+   * Sends a Slack notification to the security channel via Incoming Webhook.
+   * Color-codes the attachment based on severity level:
+   * - CRITICAL: Red (#FF0000)
+   * - HIGH: Orange (#FFA500)
+   * - WARNING: Yellow (#FFFF00)
+   * @param payload - Alert details to post to Slack
+   */
+  private async sendSlackAlert(payload: AlertPayload): Promise<void> {
+    if (!this.slackWebhookUrl) {
+      this.logger.debug('Slack Webhook URL is not configured; skipping Slack alert.');
+      return;
+    }
+
+    try {
+      const color = payload.severity === 'CRITICAL' ? '#FF0000' : payload.severity === 'HIGH' ? '#FFA500' : '#FFFF00';
+      await fetch(this.slackWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          attachments: [
+            {
+              color,
+              title: `[${payload.severity}] ${payload.title}`,
+              text: payload.message,
+              footer: `Detected at ${payload.timestamp}`,
+            },
+          ],
+        }),
+      });
+      this.logger.debug('Slack alert sent.');
+    } catch (error) {
+      this.logger.warn(`Failed to send Slack alert: ${(error as Error).message}`);
+    }
   }
 }
