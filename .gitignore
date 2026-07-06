@@ -20,3 +20,6 @@ coverage/
 .cache/
 .vercel
 *.tsbuildinfo
+beleqend_jobs.sql
+users_export.json
+import-wp-users.ts
