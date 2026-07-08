@@ -23,5 +23,16 @@
     "disable_success": "Two-factor authentication disabled.",
     "regenerate_backup_codes": "Enter your current code to regenerate backup codes.",
     "replay_detected": "This code has already been used. Generate a new one."
+  },
+  "chat": {
+    "unauthorized": "Unauthorized connection — invalid or missing token",
+    "roomIdRequired": "Room ID is required",
+    "joinRoomFailed": "Failed to join room",
+    "messageContentRequired": "Message content is required",
+    "sendMessageFailed": "Failed to send message",
+    "fileUrlRequired": "File URL is required",
+    "shareFileFailed": "Failed to share file",
+    "callLinkRequired": "Call link is required",
+    "startVideoCallFailed": "Failed to start video call"
   }
 }
