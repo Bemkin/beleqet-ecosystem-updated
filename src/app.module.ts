@@ -89,6 +89,7 @@ import { KycModule } from './modules/kyc/kyc.module';
     //  Feature modules 
     PrismaModule,
     QueuesModule,
+    RedisModule,
     AuthModule,
     UsersModule,
     JobsModule,

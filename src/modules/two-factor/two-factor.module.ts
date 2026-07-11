@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { QueuesModule } from '../queues/queues.module';
 import { AuthModule } from '../auth/auth.module';
+import { RedisModule } from '../redis/redis.module';
 import { TwoFactorController } from './two-factor.controller';
 import { TwoFactorService } from './two-factor.service';
 import { EncryptionService } from './encryption.service';
@@ -16,6 +17,7 @@ import { StepUpGuard } from './guards/step-up.guard';
   imports: [
     forwardRef(() => AuthModule),
     QueuesModule,
+    RedisModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
