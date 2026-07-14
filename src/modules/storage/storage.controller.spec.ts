@@ -43,10 +43,6 @@ describe('StorageController', () => {
       mimetype: 'application/pdf',
       buffer: Buffer.from('pdf buffer'),
       size: 200,
-      destination: '',
-      filename: '',
-      path: '',
-      stream: null as any,
     });
 
     it('should throw BadRequestException if no file is provided', async () => {

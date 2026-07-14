@@ -50,10 +50,6 @@ describe('StorageService', () => {
       mimetype: mimeType,
       buffer: Buffer.from('mock file buffer content'),
       size: size,
-      destination: '',
-      filename: '',
-      path: '',
-      stream: null as any,
     });
 
     it('should throw BadRequestException if GDPR consent is not granted', async () => {
